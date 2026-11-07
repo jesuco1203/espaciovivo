@@ -1,8 +1,6 @@
 "use client";
 
 import Link from "next/link";
-import { Swiper, SwiperSlide } from "swiper/react";
-import "swiper/css";
 import ProductCard from "./ProductCard";
 
 interface Product {
@@ -23,6 +21,13 @@ interface Product {
   }[];
 }
 
+/**
+ * Cuántas piezas se muestran por categoría en el home.
+ * Tres columnas × dos filas = seis, igual que el prototipo aprobado.
+ * El resto se ve en "Ver todos".
+ */
+const VISIBLES_POR_CATEGORIA = 6;
+
 export default function ProductCarousels({
   products,
 }: {
@@ -38,45 +43,28 @@ export default function ProductCarousels({
 
   return (
     <div id="carousels-wrapper">
-      {Object.entries(groupedProducts).map(([category, products]) => (
-        <div key={category} className="mb-16">
-          <div className="flex justify-between items-center mb-8">
-            <h2 className="title-font text-3xl font-bold">{category}</h2>
+      {Object.entries(groupedProducts).map(([category, items]) => (
+        <div key={category} className="mb-20 reveal">
+          <div className="flex justify-between items-end mb-7">
+            <h2 className="title-font text-2xl font-medium tracking-tight">
+              {category}
+            </h2>
             <Link
               href={`/search?category=${encodeURIComponent(category)}`}
-              className="text-amber-500 hover:text-amber-600 font-medium"
+              className="product-ver-todos"
             >
               Ver todos →
             </Link>
           </div>
-          <Swiper
-            spaceBetween={16}
-            slidesPerView={1.5} // Default for mobile (shows 1.5 cards)
-            className="relative"
-            breakpoints={{
-              640: {
-                // sm
-                slidesPerView: 2,
-                spaceBetween: 16,
-              },
-              768: {
-                // md
-                slidesPerView: 3,
-                spaceBetween: 16,
-              },
-              1024: {
-                // lg
-                slidesPerView: 4,
-                spaceBetween: 16,
-              },
-            }}
-          >
-            {products.map((product) => (
-              <SwiperSlide key={product.id}>
-                <ProductCard product={product} />
-              </SwiperSlide>
+          <div className="product-grid">
+            {items.slice(0, VISIBLES_POR_CATEGORIA).map((product) => (
+              <ProductCard
+                key={product.id}
+                product={product}
+                className="reveal-soft"
+              />
             ))}
-          </Swiper>
+          </div>
         </div>
       ))}
     </div>

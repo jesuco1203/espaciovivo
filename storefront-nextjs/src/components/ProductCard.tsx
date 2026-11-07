@@ -2,11 +2,10 @@
 
 import Link from "next/link";
 import Image from "next/image";
-import { useState } from "react";
 import { useCart, type CartItem } from "@/context/CartContext";
 import { useWishlist } from "@/context/WishlistContext";
 import ProductTag from "./ProductTag";
-import { FiHeart } from "react-icons/fi";
+import { FiHeart, FiShoppingCart, FiSearch, FiShare2 } from "react-icons/fi";
 import { resolveImageSrc, PLACEHOLDER } from "@/lib/images";
 
 interface Product {
@@ -15,6 +14,7 @@ interface Product {
   image_url: string | null;
   storage_key: string | null;
   tag: string | null;
+  category?: string;
   product_images: { storage_key: string | null; image_url?: string | null }[];
   variants: {
     id: number;
@@ -26,10 +26,15 @@ interface Product {
   }[];
 }
 
-export default function ProductCard({ product }: { product: Product }) {
+export default function ProductCard({
+  product,
+  className = "",
+}: {
+  product: Product;
+  className?: string;
+}) {
   const { addToCart } = useCart();
   const { toggleWish, isWishlisted } = useWishlist(); // Add this line
-  const [isAdded, setIsAdded] = useState(false);
 
   const galleryImage = product.product_images?.find((img) =>
     Boolean(resolveImageSrc(img)),
@@ -40,6 +45,12 @@ export default function ProductCard({ product }: { product: Product }) {
       storage_key: galleryImage?.storage_key ?? product.storage_key,
       image_url: galleryImage?.image_url ?? product.image_url,
     }) ?? PLACEHOLDER;
+
+  // Segunda foto del producto: se muestra al pasar el cursor (crossfade)
+  const hoverImage =
+    (product.product_images ?? [])
+      .map((img) => resolveImageSrc(img))
+      .find((src) => Boolean(src) && src !== featuredImage) ?? null;
 
   const minPrice =
     product.variants.length > 0
@@ -74,65 +85,115 @@ export default function ProductCard({ product }: { product: Product }) {
     };
 
     addToCart(itemToAdd);
-    setIsAdded(true);
-    setTimeout(() => {
-      setIsAdded(false);
-    }, 2000);
+  };
+
+  const handleShare = async () => {
+    const url = `${window.location.origin}/product/${product.id}`;
+    try {
+      if (typeof navigator !== "undefined" && navigator.share) {
+        await navigator.share({ title: product.name, url });
+      } else if (typeof navigator !== "undefined" && navigator.clipboard) {
+        await navigator.clipboard.writeText(url);
+        alert("Enlace copiado al portapapeles.");
+      }
+    } catch {
+      /* El usuario canceló o el navegador no permite compartir */
+    }
   };
 
   return (
-    <div className="product-card group bg-white rounded-lg overflow-hidden shadow-md transition-slow w-full flex flex-col">
+    <div
+      className={`product-card group relative w-full flex flex-col ${className}`}
+    >
       <Link href={`/product/${product.id}`} className="block flex-1">
         <div className="flex h-full flex-col">
-          <div className="relative w-full pt-[70%]">
+          <div className="px-[15px] pt-[30px]">
+            <div className="relative w-full pt-[100%]">
             <Image
               src={featuredImage ?? PLACEHOLDER}
               alt={product.name}
               fill
-              className="object-cover rounded-t-lg"
-              sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 25vw"
+              className={`object-cover transition-opacity duration-500 ease-out ${
+                hoverImage ? "md:group-hover:opacity-0" : "product-zoom-img"
+              }`}
+              sizes="(max-width: 620px) 100vw, (max-width: 900px) 50vw, 33vw"
             />
 
-            {product.tag && <ProductTag tag={product.tag} />}
-
-            {/* Wishlist Heart Button */}
-            <button
-              onClick={(e) => {
-                e.preventDefault(); // Prevent navigating to product page
-                toggleWish(product.id);
-              }}
-              className={`absolute top-2 left-2 p-2 rounded-full bg-white/80 backdrop-blur-sm shadow-md transition-colors duration-200 ${
-                isWishlisted(product.id)
-                  ? "text-red-500 hover:text-red-600"
-                  : "text-gray-400 hover:text-red-500"
-              }`}
-              aria-label="Add to wishlist"
-            >
-              <FiHeart
-                size={20}
-                fill={isWishlisted(product.id) ? "currentColor" : "none"}
+            {hoverImage && (
+              <Image
+                src={hoverImage}
+                alt={`${product.name} — vista alternativa`}
+                fill
+                className="product-alt-img object-cover"
+                sizes="(max-width: 620px) 100vw, (max-width: 900px) 50vw, 33vw"
               />
-            </button>
+            )}
+
+            {product.tag && <ProductTag tag={product.tag} />}
+            </div>
           </div>
-          <div className="flex flex-col gap-1 px-4 py-3">
-            <h3 className="font-medium text-lg line-clamp-2">{product.name}</h3>
-            <span className="font-bold text-lg">
-              S/ {minPrice > 0 ? minPrice.toFixed(2) : "Consultar"}
+          <div className="flex flex-col px-[15px] pt-[20px] pb-[26px]">
+            {product.category && (
+              <div className="product-card-cat">{product.category}</div>
+            )}
+            <h3 className="product-card-name line-clamp-2">{product.name}</h3>
+            <span className="product-card-price">
+              {minPrice > 0 ? `S/ ${minPrice.toFixed(2)}` : "Consultar precio"}
             </span>
           </div>
         </div>
       </Link>
-      <div className="px-4 pb-4 transition-opacity duration-200 md:opacity-0 md:group-hover:opacity-100">
-        <button
-          onClick={handleAddToCart}
-          disabled={isAdded || product.variants.length === 0}
-          className={`add-to-cart-btn w-full font-bold py-2 px-4 rounded-full transition-all duration-300 ${
-            isAdded
-              ? "bg-teal-500 text-white"
-              : "bg-[#f59e0b] hover:bg-[#e8af10] text-gray-900"
-          } disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed`}
+
+      {/* Barra de acciones: aparece al pasar el cursor */}
+      <div className="product-action-bar" role="group" aria-label="Acciones del producto">
+        {minPrice > 0 ? (
+          <button
+            type="button"
+            onClick={handleAddToCart}
+            aria-label="Añadir al carrito"
+            title="Añadir al carrito"
+          >
+            <FiShoppingCart size={18} />
+          </button>
+        ) : (
+          <a
+            href={`https://api.whatsapp.com/send?phone=51947432228&text=${encodeURIComponent(
+              `Hola, me interesa la pieza "${product.name}". ¿Me pasan el precio?`,
+            )}`}
+            target="_blank"
+            rel="noopener noreferrer"
+            aria-label="Consultar precio por WhatsApp"
+            title="Consultar precio"
+          >
+            <FiShoppingCart size={18} />
+          </a>
+        )}
+        <Link
+          href={`/product/${product.id}`}
+          aria-label="Ver producto"
+          title="Ver producto"
         >
-          {isAdded ? "¡Añadido!" : "Añadir al Carrito"}
+          <FiSearch size={18} />
+        </Link>
+        <button
+          type="button"
+          onClick={handleShare}
+          aria-label="Compartir"
+          title="Compartir"
+        >
+          <FiShare2 size={18} />
+        </button>
+        <button
+          type="button"
+          onClick={() => toggleWish(product.id)}
+          aria-label="Añadir a favoritos"
+          title="Añadir a favoritos"
+          className={isWishlisted(product.id) ? "is-active" : undefined}
+        >
+          <FiHeart
+            size={18}
+            fill={isWishlisted(product.id) ? "currentColor" : "none"}
+          />
         </button>
       </div>
     </div>

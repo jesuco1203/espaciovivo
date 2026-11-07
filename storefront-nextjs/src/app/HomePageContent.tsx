@@ -3,7 +3,7 @@
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import HeroSlider from "@/components/HeroSlider";
+import HeroCinematic from "@/components/HeroCinematic";
 import MainContent from "./MainContent";
 import { useUI } from "@/context/UIContext";
 
@@ -70,10 +70,19 @@ export default function HomePageContent({ products }: HomePageContentProps) {
 
   return (
     <>
-      <HeroSlider />
-      <h2 className="title-font text-3xl font-bold text-center my-12">
-        Nuestros Productos
-      </h2>
+      <div className="scroll-progress" aria-hidden="true" />
+      <HeroCinematic />
+      <section className="product-section reveal">
+        <div className="product-section-head">
+          <h2 className="title-font">
+            Piezas que <em>cambian</em> una habitación
+          </h2>
+          <p className="product-section-lead">
+            Espejos, mamparas y estructuras metálicas. Todo fabricado en Lima,
+            con medidas a pedido y acabados que resisten la humedad.
+          </p>
+        </div>
+      </section>
       <MainContent products={products} />
 
       {/* Sections previously in MainContent */}
@@ -245,7 +254,7 @@ export default function HomePageContent({ products }: HomePageContentProps) {
               </h2>
               <p className="text-gray-600 text-center max-w-2xl mx-auto mb-12">
                 Inspírate con nuestros diseños y comparte cómo decoras tus
-                espacios con nuestros productos usando #DecoEstilos
+                espacios con nuestros productos usando #EspacioVivo
               </p>
               <div className="instagram-feed">
                 <div className="relative aspect-[1/1] overflow-hidden rounded-lg">
@@ -294,13 +303,13 @@ export default function HomePageContent({ products }: HomePageContentProps) {
                   href="#"
                   className="inline-flex items-center text-amber-500 hover:text-amber-600 font-medium"
                 >
-                  <i className="fab fa-instagram mr-2 text-xl"></i> @DecoEstilos
+                  <i className="fab fa-instagram mr-2 text-xl"></i> @espaciovivo
                 </a>
               </div>
             </div>
           </section>
         )}
-        <section className="py-16 bg-gray-800 text-white">
+        <section className="py-16 bg-[#1A1A1A] text-white">
           <div className="container mx-auto px-4 text-center">
             <h2 className="title-font text-3xl font-bold mb-4">
               ¿Necesitas un diseño personalizado?
@@ -311,7 +320,7 @@ export default function HomePageContent({ products }: HomePageContentProps) {
             </p>
             <Link
               href="#contacto"
-              className="bg-[#d9c034] hover:bg-[#c0ad2d] text-gray-900 font-medium py-3 px-8 rounded-full transition-slow inline-block"
+              className="bg-[#B08D57] hover:bg-[#96763f] text-gray-900 font-medium py-3 px-8 rounded-full transition-slow inline-block"
             >
               Solicita tu presupuesto
             </Link>
@@ -319,7 +328,7 @@ export default function HomePageContent({ products }: HomePageContentProps) {
         </section>
       </div>
 
-      <section className="py-16 bg-[#d9c034] text-gray-900">
+      <section className="py-16 bg-[#EFEBE3] text-[#1A1A1A]">
         <div className="container mx-auto px-4 text-center">
           <h2 className="title-font text-3xl font-bold mb-4">
             Suscríbete a nuestro newsletter
@@ -336,7 +345,7 @@ export default function HomePageContent({ products }: HomePageContentProps) {
             />
             <button
               type="submit"
-              className="bg-[#d9c034] hover:bg-[#c0ad2d] text-gray-900 px-6 py-3 rounded-r-full font-medium transition-slow"
+              className="bg-[#1A1A1A] hover:bg-[#B08D57] text-white px-6 py-3 rounded-r-full font-medium transition-slow"
             >
               Suscribirse
             </button>
@@ -350,7 +359,7 @@ export default function HomePageContent({ products }: HomePageContentProps) {
           __html: JSON.stringify({
             "@context": "https://schema.org",
             "@type": "LocalBusiness",
-            name: "Deco Estilos",
+            name: "Espacio Vivo",
             address: {
               "@type": "PostalAddress",
               addressLocality: "Huancayo",

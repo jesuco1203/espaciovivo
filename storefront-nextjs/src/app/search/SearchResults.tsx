@@ -131,7 +131,7 @@ export default function SearchResults({
                       onClick={() => handlePageChange(pageNumber)}
                       className={`min-w-[42px] rounded-full px-4 py-2 text-sm font-medium transition-slow ${
                         isActive
-                          ? "bg-[#f59e0b] text-gray-900"
+                          ? "bg-[#B08D57] text-gray-900"
                           : "border border-gray-300 bg-white text-gray-700 hover:bg-gray-100"
                       }`}
                       aria-current={isActive ? "page" : undefined}

@@ -6,6 +6,7 @@ import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import WhatsAppButton from "@/components/WhatsAppButton";
 import CartModal from "@/components/CartModal";
+import ScrollReveal from "@/components/ScrollReveal";
 import { Providers } from "@/context/Providers";
 
 const poppins = Poppins({
@@ -16,8 +17,18 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Deco Estilos | Espejos y Estructuras Metálicas",
-  description: "Decoración metálica, mamparas y espejos a medida en Huancayo.",
+  title: "Espacio Vivo | Espejos, Vidrio y Estructuras Metálicas",
+  description:
+    "Espejos, mamparas de vidrio templado y estructuras metálicas a medida en Huancayo. Fabricación propia y acabados que resisten la humedad.",
+  icons: {
+    icon: "/favicon.svg",
+  },
+  openGraph: {
+    title: "Espacio Vivo | Espejos, Vidrio y Estructuras Metálicas",
+    description:
+      "Espejos, mamparas de vidrio templado y estructuras metálicas a medida en Huancayo.",
+    type: "website",
+  },
 };
 
 export default function RootLayout({
@@ -37,10 +48,18 @@ export default function RootLayout({
           rel="stylesheet"
           href="https://unpkg.com/swiper/swiper-bundle.min.css"
         />
-        <link rel="icon" href="https://i.imgur.com/nKN165j.png" />
+        <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+        {/* Marca el documento como "con JavaScript" antes de pintar.
+            Sin esta clase, el CSS no oculta nada: si JS falla, el
+            contenido se ve completo en lugar de quedar en blanco. */}
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `document.documentElement.classList.add('js');`,
+          }}
+        />
       </head>
       <body
-        className={`${poppins.variable} font-sans pt-16 bg-[#E6F4EA] min-h-screen`}
+        className={`${poppins.variable} font-sans pt-16 bg-[#F6F3EE] min-h-screen`}
       >
         <Providers>
           <Suspense fallback={null}>
@@ -50,6 +69,7 @@ export default function RootLayout({
           <Footer />
           <CartModal />
           <WhatsAppButton />
+          <ScrollReveal />
         </Providers>
       </body>
     </html>

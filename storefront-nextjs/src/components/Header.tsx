@@ -1,11 +1,11 @@
 "use client";
 
 import Link from "next/link";
-import Image from "next/image";
 import { useCart } from "@/context/CartContext";
 import { useState, useEffect } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 import { useUI } from "@/context/UIContext";
+import Logo from "./Logo";
 
 export default function Header() {
   const { itemCount, openCart } = useCart();
@@ -69,15 +69,12 @@ export default function Header() {
         <div className="flex justify-between items-center h-16">
           {/* Logo */}
           <div className="flex items-center h-full">
-            <Link href="/" className="h-full relative w-40">
-              <Image
-                src="/logo.png"
-                alt="DecoEstilos Logo"
-                fill
-                style={{ objectFit: "contain" }}
-                sizes="160px"
-                priority
-              />
+            <Link
+              href="/"
+              className="flex items-center"
+              aria-label="Espacio Vivo — inicio"
+            >
+              <Logo size={34} />
             </Link>
           </div>
 
@@ -94,6 +91,12 @@ export default function Header() {
               className="text-gray-800 hover:text-amber-500 transition-slow font-medium"
             >
               Productos
+            </Link>
+            <Link
+              href="/catalogo"
+              className="text-gray-800 hover:text-amber-500 transition-slow font-medium"
+            >
+              Catálogo
             </Link>
             <Link
               href="/wishlist"
@@ -223,6 +226,13 @@ export default function Header() {
             onClick={toggleMobileMenu}
           >
             Productos
+          </Link>
+          <Link
+            href="/catalogo"
+            className="block py-2 px-4 text-gray-800 hover:text-amber-500"
+            onClick={toggleMobileMenu}
+          >
+            Catálogo
           </Link>
           <Link
             href="/wishlist"

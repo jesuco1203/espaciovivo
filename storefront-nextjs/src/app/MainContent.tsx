@@ -26,7 +26,7 @@ interface MainContentProps {
 export default function MainContent({ products }: MainContentProps) {
   return (
     <section id="productos" className="py-16">
-      <div className="container mx-auto px-4" id="product-section-container">
+      <div className="mx-auto w-full max-w-[1400px] px-4 md:px-10" id="product-section-container">
         <Suspense fallback={<div>Cargando productos...</div>}>
           <ProductCarousels products={products} />
         </Suspense>

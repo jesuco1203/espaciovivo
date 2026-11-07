@@ -40,8 +40,8 @@ const colorNameToHex: { [key: string]: string } = {
   negro: "#111827",
   blanco: "#f9fafb",
   plata: "#d1d5db",
-  oro: "#f59e0b",
-  dorado: "#f59e0b",
+  oro: "#B08D57",
+  dorado: "#B08D57",
   unica: "#a0aec0", // Asumiendo un gris para "Unica"
   // Add more colors as needed
 };
@@ -259,7 +259,7 @@ export default function ProductOptions({ product }: ProductOptionsProps) {
                   onClick={() => setSelectedSize(size)}
                   className={`px-4 py-2 border rounded-lg transition-colors duration-200 ${
                     selectedSize === size
-                      ? "bg-[#d9c034] text-gray-900 border-[#d9c034]"
+                      ? "bg-[#B08D57] text-gray-900 border-[#B08D57]"
                       : "bg-white text-gray-800 border-gray-300 hover:border-gray-400"
                   }`}
                 >
@@ -282,7 +282,7 @@ export default function ProductOptions({ product }: ProductOptionsProps) {
           className={`w-full font-bold py-3 px-6 rounded-full transition-all duration-300 ${
             isAdded
               ? "bg-teal-500 text-white"
-              : "bg-[#d9c034] hover:bg-[#c0ad2d] text-gray-900"
+              : "bg-[#B08D57] hover:bg-[#96763f] text-gray-900"
           } disabled:bg-gray-300 disabled:text-gray-600 disabled:cursor-not-allowed`}
         >
           {isAdded ? "¡Añadido al carrito!" : "Añadir al Carrito"}

@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 .title-font {
-  font-family: "Raleway", sans-serif;
+  font-family: var(--font-poppins), "Poppins", sans-serif;
 }
 
 /* --- Utility Classes --- */
@@ -18,11 +18,9 @@
   scrollbar-width: none;
 }
 
-/* --- Component: Product Card --- */
-.product-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
-}
+/* --- Component: Product Card ---
+   Sin elevación ni sombra al pasar el cursor: el efecto es la
+   foto de ambiente que aparece, no la tarjeta que se mueve. */
 
 /* --- Component: Hero Slider --- */
 .hero-slider .swiper-slide {
@@ -56,4 +54,527 @@
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: 1rem;
+}
+
+/* --- Component: Barra de acciones de producto (hover) --- */
+.product-action-bar {
+  position: absolute;
+  top: 30px;
+  right: 15px;
+  display: flex;
+  flex-direction: column;
+  background: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  overflow: hidden;
+  z-index: 3;
+  opacity: 0;
+  transform: translateX(14px);
+  pointer-events: none;
+  transition:
+    opacity 0.28s ease,
+    transform 0.32s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.group:hover .product-action-bar,
+.group:focus-within .product-action-bar {
+  opacity: 1;
+  transform: translateX(0);
+  pointer-events: auto;
+}
+
+.product-action-bar > a,
+.product-action-bar > button {
+  display: grid;
+  place-items: center;
+  width: 44px;
+  height: 44px;
+  color: #2b2b2b;
+  border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+  transition:
+    background-color 0.2s ease,
+    color 0.2s ease;
+}
+
+.product-action-bar > :last-child {
+  border-bottom: 0;
+}
+
+.product-action-bar > a:hover,
+.product-action-bar > button:hover:not(:disabled) {
+  background-color: #F6F3EE;
+  color: #b08d3f;
+}
+
+.product-action-bar > button:disabled {
+  color: #c9c9c9;
+  cursor: not-allowed;
+}
+
+.product-action-bar > button.is-active {
+  color: #d33;
+}
+
+/* En pantallas sin hover (móvil/táctil) la barra queda visible */
+@media (hover: none) {
+  .product-action-bar {
+    opacity: 1;
+    transform: none;
+    pointer-events: auto;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-action-bar {
+    transition: none;
+  }
+}
+
+/* --- Cambio de foto al pasar el cursor --- */
+.product-zoom-img {
+  transition: transform 0.7s cubic-bezier(0.22, 1, 0.36, 1);
+  will-change: transform;
+}
+
+.group:hover .product-zoom-img {
+  transform: scale(1.06);
+}
+
+.product-alt-img {
+  opacity: 0;
+  transition: opacity 0.5s ease-out;
+}
+
+.group:hover .product-alt-img {
+  opacity: 1;
+}
+
+@media (hover: none) {
+  .group:hover .product-zoom-img {
+    transform: none;
+  }
+  .group:hover .product-alt-img {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .product-zoom-img,
+  .product-alt-img {
+    transition: none;
+  }
+}
+
+/* ============================================================
+   HERO CINEMATOGRÁFICO — animación con CSS nativo
+   La rotación de textos usa @keyframes; el resto del sitio usa
+   scroll-driven animations (animation-timeline), Baseline 2026.
+   ============================================================ */
+
+.hero-cinematic {
+  position: relative;
+  height: calc(100svh - 4rem);
+  min-height: 520px;
+  display: flex;
+  align-items: flex-end;
+  overflow: hidden;
+  background: #0d0b09;
+}
+
+.hero-cinematic video {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  z-index: 0;
+}
+
+.hero-cinematic .hero-velo {
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  pointer-events: none;
+  background:
+    linear-gradient(
+      to top,
+      rgba(0, 0, 0, 0.9) 0%,
+      rgba(0, 0, 0, 0.55) 34%,
+      rgba(0, 0, 0, 0.2) 64%,
+      rgba(0, 0, 0, 0.48) 100%
+    ),
+    linear-gradient(
+      to right,
+      rgba(0, 0, 0, 0.55) 0%,
+      rgba(0, 0, 0, 0.12) 45%,
+      rgba(0, 0, 0, 0) 72%
+    );
+}
+
+.hero-cinematic .hero-textos {
+  position: relative;
+  z-index: 2;
+  width: 100%;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0 2.5rem 5rem;
+}
+
+.hero-cinematic .hero-slide {
+  position: absolute;
+  bottom: 5rem;
+  left: 2.5rem;
+  right: 2.5rem;
+  max-width: 720px;
+  opacity: 0;
+  animation: heroCiclo 17.9s linear infinite;
+}
+
+.hero-cinematic .hero-slide:nth-child(1) {
+  animation-delay: 0s;
+}
+.hero-cinematic .hero-slide:nth-child(2) {
+  animation-delay: -13.425s;
+}
+.hero-cinematic .hero-slide:nth-child(3) {
+  animation-delay: -8.95s;
+}
+.hero-cinematic .hero-slide:nth-child(4) {
+  animation-delay: -4.475s;
+}
+
+@keyframes heroCiclo {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  2% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  22% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+  25% {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+  100% {
+    opacity: 0;
+    transform: translateY(-14px);
+  }
+}
+
+.hero-cinematic .hero-ojo {
+  font-size: 11px;
+  letter-spacing: 0.24em;
+  text-transform: uppercase;
+  color: #B08D57;
+  margin-bottom: 18px;
+  font-weight: 500;
+}
+
+.hero-cinematic h1 {
+  font-family: var(--font-poppins), "Poppins", sans-serif;
+  font-size: clamp(2.2rem, 5.4vw, 4.4rem);
+  line-height: 1.03;
+  color: #fff;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  text-shadow: 0 2px 30px rgba(0, 0, 0, 0.45);
+}
+
+.hero-cinematic h1 em {
+  font-style: normal;
+  color: rgba(255, 255, 255, 0.62);
+}
+
+.hero-cinematic .hero-slide p {
+  margin-top: 20px;
+  max-width: 46ch;
+  font-size: clamp(0.95rem, 1.3vw, 1.1rem);
+  font-weight: 300;
+  line-height: 1.65;
+  color: rgba(255, 255, 255, 0.9);
+  text-shadow: 0 1px 14px rgba(0, 0, 0, 0.5);
+}
+
+.hero-cinematic .hero-acciones {
+  display: flex;
+  gap: 12px;
+  margin-top: 28px;
+  flex-wrap: wrap;
+}
+
+.hero-cinematic .hero-btn {
+  display: inline-block;
+  padding: 14px 30px;
+  border-radius: 2px;
+  font-size: 13px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  text-decoration: none;
+  font-weight: 500;
+  transition:
+    transform 0.25s ease,
+    background-color 0.25s ease;
+}
+
+.hero-cinematic .hero-btn:hover {
+  transform: translateY(-2px);
+}
+
+.hero-cinematic .hero-btn-oro {
+  background: #B08D57;
+  color: #1A1A1A;
+}
+
+.hero-cinematic .hero-btn-borde {
+  border: 1px solid rgba(255, 255, 255, 0.55);
+  color: #fff;
+}
+
+.hero-cinematic .hero-btn-borde:hover {
+  background: rgba(255, 255, 255, 0.12);
+}
+
+/* ---------- Barra de progreso de scroll ---------- */
+.scroll-progress {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background: #B08D57;
+  transform-origin: 0 50%;
+  z-index: 60;
+  animation: crecerProgreso linear both;
+  animation-timeline: scroll(root block);
+}
+
+@keyframes crecerProgreso {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* ---------- Reveal al entrar en pantalla (efecto Norum) ----------
+   Medido del original norumestudio.com.ar:
+     · 24px de desplazamiento vertical
+     · transición de 700ms con ease
+     · IntersectionObserver con umbral 0.16
+     · escalonado de 80ms por elemento (máximo 4)
+   El estado oculto sólo se aplica si la clase .js está en <html>, que la
+   añade un script en línea antes de pintar. Sin JavaScript el contenido
+   se ve completo: nunca queda una página en blanco. */
+.js .reveal {
+  opacity: 0;
+  transform: translateY(24px);
+  transition:
+    opacity 700ms ease,
+    transform 700ms ease;
+  will-change: opacity, transform;
+}
+
+.js .reveal.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* Variante suave: para elementos secundarios (tarjetas, listas) */
+.js .reveal-soft {
+  opacity: 0;
+  transform: translateY(16px);
+  transition:
+    opacity 550ms ease,
+    transform 550ms ease;
+}
+
+.js .reveal-soft.is-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* ---------- Móvil ---------- */
+@media (max-width: 900px) {
+  .hero-cinematic .hero-textos {
+    padding: 0 1.375rem 4rem;
+  }
+  .hero-cinematic .hero-slide {
+    left: 1.375rem;
+    right: 1.375rem;
+    bottom: 4rem;
+  }
+  .hero-cinematic .hero-acciones {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+  }
+  .hero-cinematic .hero-btn {
+    padding: 12px 24px;
+    font-size: 12px;
+  }
+}
+
+/* ---------- Accesibilidad ---------- */
+@media (prefers-reduced-motion: reduce) {
+  .hero-cinematic .hero-slide {
+    animation: none;
+  }
+  .hero-cinematic .hero-slide:first-child {
+    opacity: 1;
+    transform: none;
+  }
+  .hero-cinematic video {
+    display: none;
+  }
+  .scroll-progress {
+    animation: none;
+  }
+  .reveal,
+  .reveal-soft {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+}
+
+/* ---------- Sin JavaScript: el contenido se ve completo ---------- */
+.no-js .reveal,
+.no-js .reveal-soft {
+  opacity: 1;
+  transform: none;
+}
+
+/* ============================================
+   Sección de productos — estilo editorial
+   Réplica del prototipo aprobado:
+   título con palabra en gris, aire generoso,
+   tarjetas blancas con borde fino y precio en oro.
+   ============================================ */
+
+.product-section {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 88px 40px 0;
+}
+
+.product-section-head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 40px;
+  margin-bottom: 8px;
+  flex-wrap: wrap;
+}
+
+.product-section-head h2 {
+  font-size: clamp(1.7rem, 3.2vw, 2.7rem);
+  line-height: 1.1;
+  font-weight: 400;
+  letter-spacing: -0.02em;
+  color: #1A1A1A;
+}
+
+.product-section-head h2 em {
+  font-style: normal;
+  color: #8a8378;
+}
+
+.product-section-lead {
+  max-width: 38ch;
+  color: #8a8378;
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+/* Grilla de tres columnas, sin separación entre tarjetas.
+   Réplica de estudiote.com.ar: las tarjetas se tocan (gap 0) y el
+   aire lo da el relleno interno de 30 px, así la foto queda más grande. */
+.product-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 0;
+}
+
+@media (max-width: 900px) {
+  .product-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0;
+  }
+}
+
+@media (max-width: 620px) {
+  .product-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tarjeta sin borde, sin radio y sin sombra: la foto manda */
+.product-card {
+  border: none !important;
+  border-radius: 0 !important;
+  box-shadow: none !important;
+  background: transparent !important;
+}
+
+/* Relleno interno de la tarjeta: 30 px, igual que el original */
+.product-card-pad {
+  padding: 30px;
+}
+
+/* Nombre del producto: 18 px, peso 700 y en minúsculas, como estudiote */
+.product-card-name {
+  font-family: var(--font-poppins), "Poppins", sans-serif;
+  font-size: 1.125rem;
+  font-weight: 700;
+  line-height: 1.35;
+  color: #191919;
+  text-transform: lowercase;
+  letter-spacing: -0.005em;
+}
+
+/* Pie de la tarjeta: categoría, nombre y precio apilados */
+.product-card-cat {
+  font-size: 10.5px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: #8a8378;
+  margin-bottom: 8px;
+  line-height: 1.2;
+}
+
+.product-card-price {
+  margin-top: 12px;
+  font-size: 0.95rem;
+  font-weight: 500;
+  color: #B08D57;
+}
+
+.product-ver-todos {
+  font-size: 12.5px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-weight: 500;
+  color: #B08D57;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+
+.product-ver-todos:hover {
+  color: #96763f;
+}
+
+@media (max-width: 900px) {
+  .product-section {
+    padding: 64px 22px 0;
+  }
+  .product-section-head {
+    gap: 20px;
+    margin-bottom: 4px;
+  }
 }

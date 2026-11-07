@@ -2,14 +2,14 @@ import Image from "next/image";
 
 export default function Footer() {
   return (
-    <footer id="contacto" className="bg-gray-800 text-white pt-16 pb-8">
+    <footer id="contacto" className="bg-[#1A1A1A] text-white pt-16 pb-8">
       <div className="container mx-auto px-4">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div>
-            <h3 className="title-font text-xl font-bold mb-4">DecoEstilos</h3>
+            <h3 className="title-font text-xl font-bold mb-4">Espacio Vivo</h3>
             <p className="text-gray-400 mb-4">
-              Tu destino para encontrar los mejores productos de decoración y
-              diseño para tu hogar.
+              Espejos, vidrio y estructuras metálicas. Piezas fabricadas a
+              medida para espacios que se habitan.
             </p>
             <div className="flex space-x-4">
               <a
@@ -131,7 +131,7 @@ export default function Footer() {
             <ul className="space-y-2 text-gray-400">
               <li className="flex items-start">
                 <i className="fas fa-map-marker-alt mt-1 mr-3"></i>
-                <span>Av. Industrial 123, Ate, Lima, Perú</span>
+                <span>Huancayo, Junín, Perú</span>
               </li>
               <li className="flex items-center">
                 <i className="fas fa-phone-alt mr-3"></i>
@@ -139,7 +139,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center">
                 <i className="fas fa-envelope mr-3"></i>
-                <span>hola@decoestilos.com</span>
+                <span>hola@espaciovivo.pe</span>
               </li>
               <li className="flex items-center">
                 <i className="fas fa-clock mr-3"></i>
@@ -150,7 +150,7 @@ export default function Footer() {
         </div>
         <div className="border-t border-gray-700 pt-8 flex flex-col md:flex-row justify-between items-center">
           <p className="text-gray-400 mb-4 md:mb-0">
-            © 2025 DecoEstilos. Todos los derechos reservados.
+            © 2026 Espacio Vivo. Todos los derechos reservados.
           </p>
           <div className="flex space-x-6">
             <a
