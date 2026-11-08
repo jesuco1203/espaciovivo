@@ -26,7 +26,7 @@ const COLECCIONES: Coleccion[] = [
   {
     nombre: "Espejos Verticales & de Viento",
     carpeta: "verticales",
-    imagenes: ["verticales-01", "verticales-02", "verticales-03", "verticales-04"],
+    imagenes: ["verticales-01", "verticales-03", "verticales-02", "verticales-04"],
     descripcion:
       "Piezas de formato alto y estrecho. Perfectas para pasillos y recibidores donde el espacio es corto.",
   },
@@ -47,7 +47,7 @@ const COLECCIONES: Coleccion[] = [
   {
     nombre: "Espejos Circulares & Iluminación Led",
     carpeta: "circulares",
-    imagenes: ["circulares-01", "circulares-02", "circulares-03", "circulares-04", "led-01"],
+    imagenes: ["circulares-01", "circulares-03", "circulares-04", "circulares-02", "led-01"],
     descripcion:
       "Espejos con luz integrada. Iluminan el rostro sin sombras y sirven de lámpara de ambiente.",
   },
@@ -75,6 +75,61 @@ const COLECCIONES: Coleccion[] = [
 ];
 
 const WHATSAPP = "51947432228";
+
+/**
+ * Proporción real (ancho / alto) de cada archivo.
+ *
+ * Sin esto el grid estira cada fila a la altura de su imagen más alta y
+ * `object-cover` recortaba hasta el 44 % del ancho en las fotos horizontales.
+ * Con la proporción declarada, cada pieza ocupa una fila coherente y el
+ * recorte nunca pasa del 13 %.
+ */
+const PROPORCIONES: Record<string, number> = {
+  "circulares-01": 0.75,
+  "circulares-02": 0.75,
+  "circulares-03": 0.563,
+  "circulares-04": 0.451,
+  "closet-01": 0.75,
+  "especiales-01": 1.333,
+  "especiales-02": 0.75,
+  "especiales-03": 0.75,
+  "especiales-04": 0.75,
+  "galeria-01": 0.75,
+  "galeria-02": 0.75,
+  "galeria-03": 0.75,
+  "galeria-04": 0.75,
+  "led-01": 0.75,
+  "mamparas-01": 0.75,
+  "mamparas-02": 0.75,
+  "mamparas-03": 0.75,
+  "mamparas-04": 0.75,
+  "murales-01": 0.75,
+  "murales-02": 0.75,
+  "murales-03": 0.75,
+  "murales-04": 0.75,
+  "organica-01": 1.163,
+  "organica-02": 0.769,
+  "organica-03": 0.838,
+  "organica-04": 0.75,
+  "organico-01": 0.75,
+  "revestimiento-01": 0.75,
+  "revestimiento-02": 1.5,
+  "revestimiento-03": 1.339,
+  "revestimiento-04": 0.75,
+  "verticales-01": 0.546,
+  "verticales-02": 0.75,
+  "verticales-03": 1.333,
+  "verticales-04": 0.75,
+};
+
+/** Proporción de la ranura: ancha si la foto lo es, media si es vertical, alta si es muy alargada. */
+function proporcion(nombre: string, esPortada: boolean) {
+  const real = PROPORCIONES[nombre] ?? 0.75;
+  if (esPortada) return Math.min(Math.max(real, 0.62), 1.6);
+  if (real > 1) return real;
+  if (real < 0.62) return 0.5;
+  return 0.75;
+}
 
 function urlImagen(nombre: string) {
   return `/images/catalogo-whatsapp/${nombre}.jpg`;
@@ -128,25 +183,28 @@ export default function CatalogoPage() {
                 </a>
               </div>
 
-              <div className="mb-5 grid grid-cols-2 gap-2.5">
-                {col.imagenes.map((img, i) => (
-                  <figure
-                    key={img}
-                    className={
-                      i === 0
-                        ? "col-span-2 overflow-hidden rounded-[3px] border border-[#e2ded6]"
-                        : "overflow-hidden rounded-[3px] border border-[#e2ded6]"
-                    }
-                  >
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={urlImagen(img)}
-                      alt={`${col.nombre} — ambiente ${i + 1}`}
-                      loading="lazy"
-                      className="h-full w-full object-cover transition-transform duration-500 ease-out hover:scale-[1.03]"
-                    />
-                  </figure>
-                ))}
+              <div className="mb-5 grid grid-cols-2 items-start gap-2.5">
+                {col.imagenes.map((img, i) => {
+                  const ancha =
+                    i === 0 || (PROPORCIONES[img] ?? 0.75) > 1;
+                  return (
+                    <figure
+                      key={img}
+                      style={{ aspectRatio: proporcion(img, i === 0) }}
+                      className={`overflow-hidden rounded-[3px] border border-[#e2ded6] ${
+                        ancha ? "col-span-2" : ""
+                      }`}
+                    >
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img
+                        src={urlImagen(img)}
+                        alt={`${col.nombre} — ambiente ${i + 1}`}
+                        loading="lazy"
+                        className="h-full w-full object-cover transition-transform duration-500 ease-out hover:scale-[1.03]"
+                      />
+                    </figure>
+                  );
+                })}
               </div>
 
               <p className="text-[13.5px] leading-relaxed text-[#6f695f]">
