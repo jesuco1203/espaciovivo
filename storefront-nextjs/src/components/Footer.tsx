@@ -139,7 +139,7 @@ export default function Footer() {
               </li>
               <li className="flex items-center">
                 <i className="fas fa-envelope mr-3"></i>
-                <span>hola@espaciovivo.pe</span>
+                <span>hola@espaciovivo.vip</span>
               </li>
               <li className="flex items-center">
                 <i className="fas fa-clock mr-3"></i>

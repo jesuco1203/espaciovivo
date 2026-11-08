@@ -366,7 +366,7 @@ export default function HomePageContent({ products }: HomePageContentProps) {
               addressRegion: "Junín",
               addressCountry: "PE",
             },
-            url: "https://deco-estilos.vercel.app",
+            url: "https://espaciovivo.vip",
             telephone: "+51 947 432 228",
           }),
         }}

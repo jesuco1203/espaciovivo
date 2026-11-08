@@ -13,13 +13,13 @@ export default async function sitemap(): Promise<MetadataRoute.Sitemap> {
   }
 
   const productUrls = (products ?? []).map((product: { id: number }) => ({
-    url: `https://deco-estilos.vercel.app/product/${product.id}`,
+    url: `https://espaciovivo.vip/product/${product.id}`,
     lastModified: new Date(),
   }));
 
   return [
     {
-      url: "https://deco-estilos.vercel.app",
+      url: "https://espaciovivo.vip",
       lastModified: new Date(),
     },
     ...productUrls,
