@@ -1,5 +1,3 @@
-import Image from "next/image";
-
 export default function Footer() {
   return (
     <footer id="contacto" className="bg-[#1A1A1A] text-white pt-16 pb-8">
@@ -99,33 +97,15 @@ export default function Footer() {
           <div>
             <h4 className="font-bold mb-4">Métodos de Pago</h4>
             <div className="flex flex-wrap gap-2 mb-4">
-              <div className="relative h-8 w-12">
-                <Image
-                  src="https://upload.wikimedia.org/wikipedia/commons/5/5e/Visa_Inc._logo.svg"
-                  alt="Visa"
-                  fill
-                  style={{ objectFit: "contain" }}
-                  sizes="50px"
-                />
-              </div>
-              <div className="relative h-8 w-12">
-                <Image
-                  src="https://upload.wikimedia.org/wikipedia/commons/a/a4/Mastercard_2019_logo.svg"
-                  alt="Mastercard"
-                  fill
-                  style={{ objectFit: "contain" }}
-                  sizes="50px"
-                />
-              </div>
-              <div className="relative h-8 w-12">
-                <Image
-                  src="https://upload.wikimedia.org/wikipedia/commons/0/08/Icono_de_la_aplicaci%C3%B3n_Yape.png"
-                  alt="Yape"
-                  fill
-                  sizes="(max-width: 768px) 48px, 48px"
-                  style={{ objectFit: "contain" }}
-                />
-              </div>
+              <span className="inline-flex h-8 items-center rounded border border-white/20 px-2.5 text-[11px] font-semibold tracking-wide text-white/80">
+                VISA
+              </span>
+              <span className="inline-flex h-8 items-center rounded border border-white/20 px-2.5 text-[11px] font-semibold tracking-wide text-white/80">
+                MASTERCARD
+              </span>
+              <span className="inline-flex h-8 items-center rounded border border-white/20 px-2.5 text-[11px] font-semibold tracking-wide text-white/80">
+                YAPE
+              </span>
             </div>
             <h4 className="font-bold mb-4">Contacto</h4>
             <ul className="space-y-2 text-gray-400">
